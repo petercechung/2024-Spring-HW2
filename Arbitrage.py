@@ -28,7 +28,6 @@ for tup in liquidity.keys():
 liquidity.values()
 vertexs = list(tokenset)
 dis = dict(zip(vertexs,[1000000]*len(vertexs)))
-prev = dict(zip(vertexs, ""))
 n = len(vertexs)
 paths = list(itertools.permutations(vertexs))
 best = 20
@@ -40,17 +39,11 @@ for patht in paths:
         path = pathl[0:j]
         path.append("tokenB")
         amount = 5  
-        #print(path) 
         for i in range(j):
-            # ltos = True
             now = path[i]
             next = path[i+1]
-            # if liquidity.get(liquidity[now, next]) == None:
-            #     now, next, ltos = next, now, False
             amount = uniswap(liquidity[(now,next)][0], liquidity[(now,next)][1], amount)
-            # vis[(now,next)] = vis[(next,now)] = True
-        #print(path)
-        #print(amount)
+ 
         if amount > best:
             bestpath = path
             best = amount
@@ -59,28 +52,9 @@ for patht in paths:
                 now = path[i]
                 next = path[i+1]
                 amountOut = uniswap(liquidity[(now,next)][0], liquidity[(now,next)][1], amountIn)
-                print("In swap ({}, {}), amountIn = {}, amountOut = {}".format(now, next, amountIn, amountOut))
+                # print("In swap ({}, {}), amountIn = {}, amountOut = {}".format(now, next, amountIn, amountOut))
                 amountIn = amountOut
 
-# for time in range(n-1):
-#     print(dis)
-#     for u, v in liquidity:
-#         print(u,v)
-#         w = math.log(liquidity[(u,v)][1]/liquidity[(u,v)][0])
-#         if dis[u]>dis[v]+w:
-#             dis[u] = dis[v]+w
-#             prev[u] = v
-#         u,v,w = v,u,-w
-#         if dis[u]>dis[v]+w:
-#             dis[u] = dis[v]+w
-#             prev[u] = v
-#         print(w)
-# for vertex in dis:
-#     print(str(vertex)+" "+str(dis[vertex]))
-# print(prev)
-# path = ["B"]
-# path.append("A")
-# path.reverse()
 def printpath(path, balance):
     print("path: ", end="")
     n = len(path)
